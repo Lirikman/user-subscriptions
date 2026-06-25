@@ -83,6 +83,7 @@ Creates a new user subscription record.
 **POST** /api/subsc
 
 Request body example:
+```json
 {
   "user_id":"81997f52-03eb-42ac-89d8-e55d26b09003",
   "service_name":"yandex music",
@@ -90,15 +91,18 @@ Request body example:
   "start_date":"07-2025",
   "end_date":"09-2025"
 }
+```
 
 or
 
+```json
 {
   "user_id":"81997f52-03eb-42ac-89d8-e55d26b09003",
   "service_name":"ivi",
   "price":400,
   "start_date":"05-2025"
 }
+```
 
 **Example answer:**
 ```json
