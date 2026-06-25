@@ -30,7 +30,8 @@ After a successful launch, the application will be available at:
 
 ## 📡 API Endpoints
 All requests are sent to the base URL: http://127.0.0.1:8080
-Headers:Content-Type: application/json
+
+Headers: Content-Type: application/json
 
 
 ### Getting all user subscription records
