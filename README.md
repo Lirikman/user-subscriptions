@@ -72,12 +72,13 @@ Response code: 200 OK
 
 ### Creating a new subscription entry
 Creates a new user subscription record.
-All records are unique.
-The 'user_id' field must be in the UUID format, not empty.
-The 'price' field is a positive integer, not empty.
-The 'service name' field - string, not empty.
-The 'end_date' field is optional.
-The format of the 'start_date' and 'end_date' fields is month-year (example, '05-2022').
+
+- All records are unique.
+- The 'user_id' field must be in the UUID format, not empty.
+- The 'price' field is a positive integer, not empty.
+- The 'service name' field - string, not empty.
+- The 'end_date' field is optional.
+- The format of the 'start_date' and 'end_date' fields is month-year (example, '05-2022').
 
 **POST** /api/subsc
 
