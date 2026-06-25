@@ -82,7 +82,7 @@ Creates a new user subscription record.
 
 **POST** /api/subsc
 
-Request body example:
+**Request body example:**
 ```json
 {
   "user_id":"81997f52-03eb-42ac-89d8-e55d26b09003",
@@ -148,7 +148,7 @@ Updating user subscription information by record ID number.
 
 **PUT** /api/subsc/5
 
-Request body example:
+**Request body example:**
 ```json
 {
   "user_id":"81997f52-03eb-42ac-89d8-e55d26b09003",
@@ -190,7 +190,7 @@ Returns the sum of the prices of all user subscriptions for the specified period
 
 **GET** /api/cost
 
-Request body example:
+**Request body example:**
 ```json
 {
   "user_id":"81997f52-03eb-42ac-89d8-e55d26b09003",
