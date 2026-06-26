@@ -20,13 +20,26 @@ cd user-subscriptions
 
 2. Launch the project
 ```bash
-docker compose up --build -d
+make build
 ```
 
 3. Check the work
 After a successful launch, the application will be available at: 
 👉 http://127.0.0.1:8080
 
+## 🛠️ Development
+
+### 🧪 Run golangci-lint 
+
+```bash
+make lint
+```
+
+### 🧪 Run tests
+
+```bash
+make test
+```
 
 ## 📡 API Endpoints
 All requests are sent to the base URL: http://127.0.0.1:8080

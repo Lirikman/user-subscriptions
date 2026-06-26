@@ -93,6 +93,7 @@ func CreateSubscription(db *generated.Queries) gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "user id is incorrect (example user_id: 123e4567-e89b-12d3-a456-426655440000)"})
 			return
 		}
+
 		// проверяем корректность ввода цены
 		if req.Price <= 0 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "subscription price must be positive"})
@@ -395,7 +396,6 @@ func TotalCostSubscription(db *generated.Queries) gin.HandlerFunc {
 
 func main() {
 	// загружаем переменные окружения
-	err := godotenv.Load()
 	if err := godotenv.Load(); err != nil {
 		log.Println("warning: .env file not found, reading system variables")
 	}
@@ -414,7 +414,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("connection error: %v", err)
 	}
-	defer db.Close()
+	// освобождаем ресурсы
+	defer func() {
+		if closeErr := db.Close(); closeErr != nil && err == nil {
+			err = closeErr
+		}
+	}()
 	if err := goose.SetDialect("postgres"); err != nil {
 		log.Fatalf("dialect installation error: %v", err)
 	}
