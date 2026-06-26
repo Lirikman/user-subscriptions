@@ -20,12 +20,18 @@ cd user-subscriptions
 
 2. Launch the project
 ```bash
-make build
+make run
 ```
 
 3. Check the work
 After a successful launch, the application will be available at: 
 👉 http://127.0.0.1:8080
+
+4. Stopping and removing the container
+```bash
+make stop
+```
+
 
 ## 🛠️ Development
 
