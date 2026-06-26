@@ -4,7 +4,22 @@
 ## Description
 REST-service for aggregating data on user subscriptions
 
-## 🛠 Prerequisites
+## 🛠️ Tech Stack
+
+### Core Stack
+* **Language:** **Go (Golang)**
+* **Web Framework:** **Gin Gonic**
+* **Database:** **PostgreSQL**
+
+### Database & Development Tools
+* **Data Access Layer:** **sqlc**
+* **Database Migrations:** **goose**
+
+### API & Environment
+* **API Documentation:** **Swagger (OpenAPI 3.0)**
+* **Containerization:** **Docker Compose** 
+
+## 💻 Prerequisites
 To start the project you will need:
  * Docker Engine v24.0+
  * Docker Compose v2.20+
@@ -47,7 +62,11 @@ make lint
 make test
 ```
 
-## 📡 API Endpoints
+## 📡 API documentation
+
+📝 **Swagger UI (Interactive documentation): 
+http://localhost:8080/swagger/index.html
+
 All requests are sent to the base URL: http://127.0.0.1:8080
 
 Headers: Content-Type: application/json
@@ -207,7 +226,7 @@ Response code: 200 OK
 ### Total cost of subscriptions by period
 Returns the sum of the prices of all user subscriptions for the specified period.
 
-**GET** /api/cost
+**POST** /api/cost
 
 **Request body example:**
 ```json

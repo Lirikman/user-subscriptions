@@ -1,0 +1,323 @@
+basePath: /api
+definitions:
+  db.CreateSubscriptionRow:
+    properties:
+      end_date: {}
+      id:
+        type: integer
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        type: string
+      user_id:
+        type: string
+    type: object
+  db.GetSubscriptionsRow:
+    properties:
+      end_date: {}
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        type: string
+      user_id:
+        type: string
+    type: object
+  db.ListSubscriptionsRow:
+    properties:
+      end_date: {}
+      id:
+        type: integer
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        type: string
+      user_id:
+        type: string
+    type: object
+  db.UpdateSubscriptionRow:
+    properties:
+      end_date: {}
+      id:
+        type: integer
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        type: string
+      user_id:
+        type: string
+    type: object
+  main.CreateSubReqDTO:
+    properties:
+      end_date:
+        type: string
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        type: string
+      user_id:
+        type: string
+    required:
+    - price
+    - service_name
+    - start_date
+    - user_id
+    type: object
+  main.HTTPError:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  main.TotalPriceReqDTO:
+    properties:
+      end_date:
+        type: string
+      service_name:
+        type: string
+      start_date:
+        type: string
+      user_id:
+        type: string
+    required:
+    - end_date
+    - service_name
+    - start_date
+    - user_id
+    type: object
+  main.UpdateSubReqDTO:
+    properties:
+      end_date:
+        type: string
+      price:
+        type: integer
+      service_name:
+        type: string
+      start_date:
+        type: string
+      user_id:
+        type: string
+    required:
+    - price
+    - service_name
+    - start_date
+    - user_id
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: REST-API service for aggregating data on user subscriptions
+  title: User subscription
+  version: "1.0"
+paths:
+  /cost:
+    post:
+      consumes:
+      - application/json
+      description: The total cost of all user subscriptions by service name and period
+        is returned
+      parameters:
+      - description: Data for requesting the total cost
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.TotalPriceReqDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful receipt of the total cost
+          schema:
+            type: string
+        "400":
+          description: Data validation error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Database entry not found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Total cost of subscriptions for the period
+      tags:
+      - subscriptions
+  /subsc:
+    get:
+      consumes:
+      - application/json
+      description: Returns a full list of subscription records. If there are no subscriptions,
+        returns a 404 response
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with subscription list
+          schema:
+            items:
+              $ref: '#/definitions/db.ListSubscriptionsRow'
+            type: array
+        "404":
+          description: No subscriptions found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Getting all subscriptions
+      tags:
+      - subscriptions
+    post:
+      consumes:
+      - application/json
+      description: Creates a new subscription record in the database with validation
+        of dates and prices
+      parameters:
+      - description: Data for creating a subscription
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateSubReqDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Subscription successfully created
+          schema:
+            $ref: '#/definitions/db.CreateSubscriptionRow'
+        "400":
+          description: Data validation error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Creating a new subscription
+      tags:
+      - subscriptions
+  /subsc/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Removes a subscription record from the database by its unique ID
+      parameters:
+      - description: ID number of the entry in the database (id)
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful removal
+          schema:
+            type: string
+        "400":
+          description: Invalid ID format
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Database entry not found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Deleting a record
+      tags:
+      - subscriptions
+    put:
+      consumes:
+      - application/json
+      description: Updates the data of an existing subscription by its ID with full
+        parameter validation
+      parameters:
+      - description: Record id (ID)
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: New subscription data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/main.UpdateSubReqDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful updated
+          schema:
+            $ref: '#/definitions/db.UpdateSubscriptionRow'
+        "400":
+          description: Data validation error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Database entry not found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Updating a subscription record
+      tags:
+      - subscriptions
+  /subsc/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Returning information about all user subscriptions by user_id
+      parameters:
+      - description: User ID
+        example: 123e4567-e89b-12d3-a456-426614174000
+        format: uuid
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved records
+          schema:
+            items:
+              $ref: '#/definitions/db.GetSubscriptionsRow'
+            type: array
+        "400":
+          description: Incorrect user_id
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Database entry not found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Getting a subscription record by user ID
+      tags:
+      - subscriptions
+swagger: "2.0"
