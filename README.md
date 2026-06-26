@@ -43,7 +43,8 @@ make test
 
 ## 📡 API Endpoints
 All requests are sent to the base URL: http://127.0.0.1:8080
-Headers:Content-Type: application/json
+
+Headers: Content-Type: application/json
 
 
 ### Getting all user subscription records
@@ -84,16 +85,18 @@ Response code: 200 OK
 
 ### Creating a new subscription entry
 Creates a new user subscription record.
-All records are unique.
-The 'user_id' field must be in the UUID format, not empty.
-The 'price' field is a positive integer, not empty.
-The 'service name' field - string, not empty.
-The 'end_date' field is optional.
-The format of the 'start_date' and 'end_date' fields is month-year (example, '05-2022').
+
+- All records are unique.
+- The 'user_id' field must be in the UUID format, not empty.
+- The 'price' field is a positive integer, not empty.
+- The 'service name' field - string, not empty.
+- The 'end_date' field is optional.
+- The format of the 'start_date' and 'end_date' fields is month-year (example, '05-2022').
 
 **POST** /api/subsc
 
-Request body example:
+**Request body example:**
+```json
 {
   "user_id":"81997f52-03eb-42ac-89d8-e55d26b09003",
   "service_name":"yandex music",
@@ -101,15 +104,18 @@ Request body example:
   "start_date":"07-2025",
   "end_date":"09-2025"
 }
+```
 
 or
 
+```json
 {
   "user_id":"81997f52-03eb-42ac-89d8-e55d26b09003",
   "service_name":"ivi",
   "price":400,
   "start_date":"05-2025"
 }
+```
 
 **Example answer:**
 ```json
@@ -155,7 +161,8 @@ Updating user subscription information by record ID number.
 
 **PUT** /api/subsc/5
 
-Request body example:
+**Request body example:**
+```json
 {
   "user_id":"81997f52-03eb-42ac-89d8-e55d26b09003",
   "service_name":"vk music",
@@ -163,6 +170,7 @@ Request body example:
   "start_date":"02-2025",
   "end_date":"05-2025"
 }
+```
 
 **Example answer:**
 ```json
@@ -195,13 +203,15 @@ Returns the sum of the prices of all user subscriptions for the specified period
 
 **GET** /api/cost
 
-Request body example:
+**Request body example:**
+```json
 {
   "user_id":"81997f52-03eb-42ac-89d8-e55d26b09003",
   "service_name":"yandex music",
   "start_date":"02-2025",
   "end_date":"10-2025"
 }
+```
 
 **Example answer:**
 ```json
