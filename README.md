@@ -216,10 +216,8 @@ Deletes subscription records by the specified record ID number.
 **DELETE** /api/subsc/10
 
 **Example answer:**
-```json
-{
-  "message":"entry with ID 10 has been successfully deleted"
-}
+```
+  "entry with ID 10 has been successfully deleted"
 ```
 Response code: 200 OK
 
@@ -239,9 +237,7 @@ Returns the sum of the prices of all user subscriptions for the specified period
 ```
 
 **Example answer:**
-```json
-{
-  "message":"total price - 750 rubles"
-}
+```
+  "total price - 750 rubles"
 ```
 Response code: 200 OK

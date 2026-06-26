@@ -77,7 +77,7 @@ func TestMain(m *testing.M) {
 	// регистрация маршрутов
 	router.GET("/api/subsc", ListSubscriptions(queries))
 	router.GET("/api/subsc/:user_id", GetSubscriptionsFromUserId(queries))
-	router.GET("/api/cost", TotalCostSubscription(queries))
+	router.POST("/api/cost", TotalCostSubscription(queries))
 	router.POST("/api/subsc", CreateSubscription(queries))
 	router.PUT("/api/subsc/:id", UpdateSubscription(queries))
 	router.DELETE("/api/subsc/:id", DeleteSubscription(queries))
@@ -121,7 +121,7 @@ func TestGetSubscriptionUserFromIDWrong(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "user id is incorrect (example user_id: 123e4567-e89b-12d3-a456-426655440000)"}
+	want := map[string]any{"code": float64(400), "message": "user id is incorrect (example user_id: 123e4567-e89b-12d3-a456-426655440000)"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -146,7 +146,7 @@ func TestCreateSubscriptionRight(t *testing.T) {
 }
 
 func TestCreateSubscriptionWrong1(t *testing.T) {
-	// данные для запроса (неккорректный user_id)
+	// данные для запроса (некорректный user_id)
 	data := map[string]any{"user_id": "dfbd21b7", "service_name": "filmix", "price": 500, "start_date": "10-2025", "end_date": "12-2025"}
 	reqData, _ := json.Marshal(data)
 	// выполнение запроса
@@ -159,7 +159,7 @@ func TestCreateSubscriptionWrong1(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "user id is incorrect (example user_id: 123e4567-e89b-12d3-a456-426655440000)"}
+	want := map[string]any{"code": float64(400), "message": "user id is incorrect (example user_id: 123e4567-e89b-12d3-a456-426655440000)"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -178,7 +178,7 @@ func TestCreateSubscriptionWrong2(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "invalid request"}
+	want := map[string]any{"code": float64(400), "message": "invalid request"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -197,7 +197,7 @@ func TestCreateSubscriptionWrong3(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "subscription price must be positive"}
+	want := map[string]any{"code": float64(400), "message": "subscription price must be positive"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -216,7 +216,7 @@ func TestCreateSubscriptionWrong4(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "subscription start date is incorrect (example start date: 07-2025)"}
+	want := map[string]any{"code": float64(400), "message": "subscription start date is incorrect (example start date: 07-2025)"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -235,7 +235,7 @@ func TestCreateSubscriptionWrong5(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "subscription end date is incorrect (example: 05-2026)"}
+	want := map[string]any{"code": float64(400), "message": "subscription end date is incorrect (example: 05-2026)"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -254,7 +254,7 @@ func TestCreateSubscriptionWrong6(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "the subscription period is set incorrectly"}
+	want := map[string]any{"code": float64(400), "message": "the subscription period is set incorrectly"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -273,7 +273,7 @@ func TestCreateSubscriptionWrong7(t *testing.T) {
 	assert.Equal(t, http.StatusInternalServerError, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "internal server error"}
+	want := map[string]any{"code": float64(500), "message": "internal server error"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -311,7 +311,7 @@ func TestUpdateSubscriptionWrong1(t *testing.T) {
 	assert.Equal(t, http.StatusNotFound, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "no records with this ID were found"}
+	want := map[string]any{"code": float64(404), "message": "no records with this ID were found"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -330,7 +330,7 @@ func TestUpdateSubscriptionWrong2(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "user id is incorrect (example user_id: 123e4567-e89b-12d3-a456-426655440000)"}
+	want := map[string]any{"code": float64(400), "message": "user id is incorrect (example user_id: 123e4567-e89b-12d3-a456-426655440000)"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -349,7 +349,7 @@ func TestUpdateSubscriptionWrong3(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "invalid request"}
+	want := map[string]any{"code": float64(400), "message": "invalid request"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -368,7 +368,7 @@ func TestUpdateSubscriptionWrong4(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "subscription price must be positive"}
+	want := map[string]any{"code": float64(400), "message": "subscription price must be positive"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -387,7 +387,7 @@ func TestUpdateSubscriptionWrong5(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "subscription start date is incorrect (example start date: 07-2025)"}
+	want := map[string]any{"code": float64(400), "message": "subscription start date is incorrect (example start date: 07-2025)"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -406,7 +406,7 @@ func TestUpdateSubscriptionWrong6(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "subscription end date is incorrect (example: 05-2026)"}
+	want := map[string]any{"code": float64(400), "message": "subscription end date is incorrect (example: 05-2026)"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -425,7 +425,7 @@ func TestUpdateSubscriptionWrong7(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "subscription period is set incorrectly"}
+	want := map[string]any{"code": float64(400), "message": "subscription period is set incorrectly"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
@@ -435,18 +435,15 @@ func TestTotalCostSubscription(t *testing.T) {
 	data := map[string]any{"user_id": "3a51e2d6-b60b-40c5-993f-a251c9059bc6", "service_name": "ivi", "start_date": "10-2025", "end_date": "03-2026"}
 	reqData, _ := json.Marshal(data)
 	// выполнение запроса
-	req, _ := http.NewRequest(http.MethodGet, "/api/cost", bytes.NewBuffer(reqData))
+	req, _ := http.NewRequest(http.MethodPost, "/api/cost", bytes.NewBuffer(reqData))
 	// добавляем заголовок
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 	// проверка результатов
 	assert.Equal(t, http.StatusOK, w.Code)
-	var response map[string]any
-	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"message": "total price - 950 rubles"}
-	assert.NoError(t, err)
-	assert.Equal(t, want, response)
+	want := "total price - 950 rubles"
+	assert.Equal(t, want, w.Body.String())
 }
 
 func TestDeleteSubscriptionRight(t *testing.T) {
@@ -456,11 +453,8 @@ func TestDeleteSubscriptionRight(t *testing.T) {
 	router.ServeHTTP(wDel, reqDel)
 	// проверка результатов
 	assert.Equal(t, http.StatusOK, wDel.Code)
-	var responseDel map[string]any
-	err := json.Unmarshal(wDel.Body.Bytes(), &responseDel)
-	want := map[string]any{"message": "entry with ID 8 has been successfully deleted"}
-	assert.NoError(t, err)
-	assert.Equal(t, want, responseDel)
+	want := "entry with ID 8 has been successfully deleted"
+	assert.Equal(t, want, wDel.Body.String())
 	// выполнение запроса получения оставшихся записей
 	reqGet, _ := http.NewRequest(http.MethodGet, "/api/subsc", nil)
 	wGet := httptest.NewRecorder()
@@ -468,7 +462,7 @@ func TestDeleteSubscriptionRight(t *testing.T) {
 	// проверка результатов
 	assert.Equal(t, http.StatusOK, wGet.Code)
 	var responseGet []map[string]any
-	err = json.Unmarshal(wGet.Body.Bytes(), &responseGet)
+	err := json.Unmarshal(wGet.Body.Bytes(), &responseGet)
 	assert.NoError(t, err)
 	assert.Equal(t, 8, len(responseGet))
 }
@@ -483,7 +477,7 @@ func TestDeleteSubscriptionWrong(t *testing.T) {
 	assert.Equal(t, http.StatusNotFound, w.Code)
 	var response map[string]any
 	err := json.Unmarshal(w.Body.Bytes(), &response)
-	want := map[string]any{"error": "no records with this ID were found"}
+	want := map[string]any{"code": float64(404), "message": "no records with this ID were found"}
 	assert.NoError(t, err)
 	assert.Equal(t, want, response)
 }
