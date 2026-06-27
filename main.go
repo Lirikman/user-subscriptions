@@ -50,34 +50,34 @@ func setupRouter() *gin.Engine {
 
 // DTO для запроса создания записи
 type CreateSubReqDTO struct {
-	UserID      string `json:"user_id" binding:"required"`
-	ServiceName string `json:"service_name" binding:"required"`
-	Price       int32  `json:"price" binding:"required"`
-	StartDate   string `json:"start_date" binding:"required"`
-	EndDate     string `json:"end_date"`
+	UserID      string `json:"user_id" binding:"required" example:"9c7ae5f1-f950-4790-8201-2b45d7853bd7"`
+	ServiceName string `json:"service_name" binding:"required" example:"kion"`
+	Price       int32  `json:"price" binding:"required" example:"500"`
+	StartDate   string `json:"start_date" binding:"required" example:"05-2025"`
+	EndDate     string `json:"end_date" example:"07-2025"`
 }
 
 // DTO для входящего обновления записи
 type UpdateSubReqDTO struct {
-	UserID      string `json:"user_id" binding:"required"`
-	ServiceName string `json:"service_name" binding:"required"`
-	Price       int32  `json:"price" binding:"required"`
-	StartDate   string `json:"start_date" binding:"required"`
-	EndDate     string `json:"end_date"`
+	UserID      string `json:"user_id" binding:"required" example:"a4fe5fe8-852e-4d29-9b34-5e8f84d18aea"`
+	ServiceName string `json:"service_name" binding:"required" example:"okko"`
+	Price       int32  `json:"price" binding:"required" example:"650"`
+	StartDate   string `json:"start_date" binding:"required" example:"06-2024"`
+	EndDate     string `json:"end_date" example:"10-2024"`
 }
 
 // DTO для получения общей стоимости подписок
 type TotalPriceReqDTO struct {
-	UserID      string `json:"user_id" binding:"required"`
-	ServiceName string `json:"service_name" binding:"required"`
-	StartDate   string `json:"start_date" binding:"required"`
-	EndDate     string `json:"end_date" binding:"required"`
+	UserID      string `json:"user_id" binding:"required" example:"81997f52-03eb-42ac-89d8-e55d26b09003"`
+	ServiceName string `json:"service_name" binding:"required" example:"ivi"`
+	StartDate   string `json:"start_date" binding:"required" example:"02-2025"`
+	EndDate     string `json:"end_date" binding:"required" example:"10-2025"`
 }
 
 // Структура ошибки при запросах
 type HTTPError struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	Code    int    `json:"code" example:"200"`
+	Message string `json:"message" example:"request was completed successfully"`
 }
 
 // CreateSubscription godoc

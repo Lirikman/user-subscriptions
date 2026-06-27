@@ -57,14 +57,19 @@ definitions:
   main.CreateSubReqDTO:
     properties:
       end_date:
+        example: 07-2025
         type: string
       price:
+        example: 500
         type: integer
       service_name:
+        example: kion
         type: string
       start_date:
+        example: 05-2025
         type: string
       user_id:
+        example: 9c7ae5f1-f950-4790-8201-2b45d7853bd7
         type: string
     required:
     - price
@@ -75,19 +80,25 @@ definitions:
   main.HTTPError:
     properties:
       code:
+        example: 200
         type: integer
       message:
+        example: request was completed successfully
         type: string
     type: object
   main.TotalPriceReqDTO:
     properties:
       end_date:
+        example: 10-2025
         type: string
       service_name:
+        example: ivi
         type: string
       start_date:
+        example: 02-2025
         type: string
       user_id:
+        example: 81997f52-03eb-42ac-89d8-e55d26b09003
         type: string
     required:
     - end_date
@@ -98,14 +109,19 @@ definitions:
   main.UpdateSubReqDTO:
     properties:
       end_date:
+        example: 10-2024
         type: string
       price:
+        example: 650
         type: integer
       service_name:
+        example: okko
         type: string
       start_date:
+        example: 06-2024
         type: string
       user_id:
+        example: a4fe5fe8-852e-4d29-9b34-5e8f84d18aea
         type: string
     required:
     - price

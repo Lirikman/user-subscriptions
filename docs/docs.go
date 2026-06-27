@@ -404,19 +404,24 @@ const docTemplate = `{
             ],
             "properties": {
                 "end_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "07-2025"
                 },
                 "price": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 500
                 },
                 "service_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "kion"
                 },
                 "start_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "05-2025"
                 },
                 "user_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "9c7ae5f1-f950-4790-8201-2b45d7853bd7"
                 }
             }
         },
@@ -424,10 +429,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 200
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "request was completed successfully"
                 }
             }
         },
@@ -441,16 +448,20 @@ const docTemplate = `{
             ],
             "properties": {
                 "end_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "10-2025"
                 },
                 "service_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "ivi"
                 },
                 "start_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "02-2025"
                 },
                 "user_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "81997f52-03eb-42ac-89d8-e55d26b09003"
                 }
             }
         },
@@ -464,19 +475,24 @@ const docTemplate = `{
             ],
             "properties": {
                 "end_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "10-2024"
                 },
                 "price": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 650
                 },
                 "service_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "okko"
                 },
                 "start_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "06-2024"
                 },
                 "user_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "a4fe5fe8-852e-4d29-9b34-5e8f84d18aea"
                 }
             }
         }
