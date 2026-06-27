@@ -75,7 +75,7 @@ Headers: Content-Type: application/json
 ### Getting all user subscription records
 Returns all user subscription records.
 
-**GET** /api/subsc
+**GET** /subsc
 
 **Example answer:**
 ```json
@@ -118,7 +118,7 @@ Creates a new user subscription record.
 - The 'end_date' field is optional.
 - The format of the 'start_date' and 'end_date' fields is month-year (example, '05-2022').
 
-**POST** /api/subsc
+**POST** /subsc
 
 **Request body example:**
 ```json
@@ -158,7 +158,7 @@ Response code: 201 Created
 ### Getting subscriptions by user id
 Returns all subscriptions of a user by the specified user id.
 
-**GET** /api/subsc/:user_id
+**GET** /subsc/:user_id
 
 **Example answer:**
 ```json
@@ -184,7 +184,7 @@ Response code: 200 OK
 ### Update subscription information
 Updating user subscription information by record ID number.
 
-**PUT** /api/subsc/5
+**PUT** /subsc/5
 
 **Request body example:**
 ```json
@@ -213,7 +213,7 @@ Response code: 200 OK
 ### Deleting a subscription entry
 Deletes subscription records by the specified record ID number.
 
-**DELETE** /api/subsc/10
+**DELETE** /subsc/10
 
 **Example answer:**
 ```
@@ -224,7 +224,7 @@ Response code: 200 OK
 ### Total cost of subscriptions by period
 Returns the sum of the prices of all user subscriptions for the specified period.
 
-**POST** /api/cost
+**POST** /cost
 
 **Request body example:**
 ```json
