@@ -5,12 +5,12 @@
 REST-service for aggregating data on user subscriptions
 
 Example of 'Subscriptions' object:
-* id (bigserial, read-only): Unique record number.
-* user_id (uuid, required): Unique user identifier.
-* service_name (string, required): Name of the service providing the subscription.
-* price (int, required): Monthly subscription cost in rubles.
-* start_date (date, required): Subscription start date (month - year).
-* end_date (date, optional): Subscription end date.
+* **id (bigserial, read-only):** Unique record number
+* **user_id (uuid, required):** Unique user identifier
+* **service_name (string, required):** Name of the service providing the subscription
+* **price (int, required):** Monthly subscription cost in rubles
+* **start_date (date, required):** Subscription start date (month - year)
+* **end_date (date, optional):** Subscription end date
 
 
 ## 🛠️ Tech Stack
