@@ -183,31 +183,49 @@ func (q *Queries) ListSubscriptions(ctx context.Context) ([]ListSubscriptionsRow
 }
 
 const totalPriceSubscription = `-- name: TotalPriceSubscription :one
-SELECT COALESCE(SUM(price), 0) AS total_price
-FROM subscriptions
-WHERE user_id = $1
-  AND service_name = $2
-  AND start_date <= $3 
-  AND (end_date >= $4 OR end_date IS NULL)
+WITH period_bounds AS (
+    SELECT
+        GREATEST(start_date, $3::DATE) AS active_start,
+        LEAST(COALESCE(end_date, CURRENT_DATE), $4::DATE) AS active_end,
+        price
+    FROM 
+        subscriptions
+    WHERE 
+        user_id = $1
+        AND service_name = $2
+        AND start_date <= $4::DATE
+        AND COALESCE(end_date, CURRENT_DATE) >= $3::DATE
+),
+calculated_months AS (
+    SELECT 
+        price,
+        EXTRACT(YEAR FROM AGE(active_end, active_start)) * 12 + EXTRACT(MONTH FROM AGE(active_end, active_start)) AS months_count
+    FROM 
+        period_bounds
+)
+SELECT 
+    COALESCE(SUM(price * months_count), 0)::BIGINT AS total_cost
+FROM 
+    calculated_months
 `
 
 type TotalPriceSubscriptionParams struct {
 	UserID      pgtype.UUID `json:"user_id"`
 	ServiceName string      `json:"service_name"`
-	EndDate     pgtype.Date `json:"end_date"`
-	StartDate   pgtype.Date `json:"start_date"`
+	Column3     pgtype.Date `json:"column_3"`
+	Column4     pgtype.Date `json:"column_4"`
 }
 
-func (q *Queries) TotalPriceSubscription(ctx context.Context, arg TotalPriceSubscriptionParams) (interface{}, error) {
+func (q *Queries) TotalPriceSubscription(ctx context.Context, arg TotalPriceSubscriptionParams) (int64, error) {
 	row := q.db.QueryRow(ctx, totalPriceSubscription,
 		arg.UserID,
 		arg.ServiceName,
-		arg.EndDate,
-		arg.StartDate,
+		arg.Column3,
+		arg.Column4,
 	)
-	var total_price interface{}
-	err := row.Scan(&total_price)
-	return total_price, err
+	var total_cost int64
+	err := row.Scan(&total_cost)
+	return total_cost, err
 }
 
 const updateSubscription = `-- name: UpdateSubscription :one

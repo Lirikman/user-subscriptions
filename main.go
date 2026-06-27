@@ -450,8 +450,8 @@ func TotalCostSubscription(db *generated.Queries) gin.HandlerFunc {
 		params := generated.TotalPriceSubscriptionParams{
 			UserID:      userUUID,
 			ServiceName: svcName,
-			StartDate:   strDate,
-			EndDate:     endDate,
+			Column3:     strDate,
+			Column4:     endDate,
 		}
 		res, err := db.TotalPriceSubscription(c, params)
 		if err != nil {

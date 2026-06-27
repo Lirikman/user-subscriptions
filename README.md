@@ -4,6 +4,15 @@
 ## Description
 REST-service for aggregating data on user subscriptions
 
+Example of 'Subscriptions' object:
+* id (bigserial, read-only): Unique record number.
+* user_id (uuid): Unique user identifier.
+* service_name (string): Name of the service providing the subscription.
+* price (int): Monthly subscription cost in rubles.
+* start_date (date): Subscription start date (month - year).
+* end_date (date): Subscription end date.
+
+
 ## 🛠️ Tech Stack
 
 ### Core Stack

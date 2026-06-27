@@ -430,9 +430,9 @@ func TestUpdateSubscriptionWrong7(t *testing.T) {
 	assert.Equal(t, want, response)
 }
 
-func TestTotalCostSubscription(t *testing.T) {
+func TestTotalCostSubscriptionZero(t *testing.T) {
 	// данные для запроса
-	data := map[string]any{"user_id": "3a51e2d6-b60b-40c5-993f-a251c9059bc6", "service_name": "ivi", "start_date": "10-2025", "end_date": "03-2026"}
+	data := map[string]any{"user_id": "3a51e2d6-b60b-40c5-993f-a251c9059bc6", "service_name": "ivi", "start_date": "10-2025", "end_date": "11-2025"}
 	reqData, _ := json.Marshal(data)
 	// выполнение запроса
 	req, _ := http.NewRequest(http.MethodPost, "/api/cost", bytes.NewBuffer(reqData))
@@ -442,8 +442,189 @@ func TestTotalCostSubscription(t *testing.T) {
 	router.ServeHTTP(w, req)
 	// проверка результатов
 	assert.Equal(t, http.StatusOK, w.Code)
-	want := "total price - 950 rubles"
+	want := "total price - 0 rubles"
 	assert.Equal(t, want, w.Body.String())
+}
+
+func TestTotalCostSubscriptionMonth(t *testing.T) {
+	// данные для запроса
+	data := map[string]any{"user_id": "3a51e2d6-b60b-40c5-993f-a251c9059bc6", "service_name": "ivi", "start_date": "11-2025", "end_date": "12-2025"}
+	reqData, _ := json.Marshal(data)
+	// выполнение запроса
+	req, _ := http.NewRequest(http.MethodPost, "/api/cost", bytes.NewBuffer(reqData))
+	// добавляем заголовок
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	// проверка результатов
+	assert.Equal(t, http.StatusOK, w.Code)
+	want := "total price - 400 rubles"
+	assert.Equal(t, want, w.Body.String())
+}
+
+func TestTotalCostSubscriptionPeriodConstPrice(t *testing.T) {
+	// данные для запроса
+	data := map[string]any{"user_id": "3a51e2d6-b60b-40c5-993f-a251c9059bc6", "service_name": "ivi", "start_date": "05-2025", "end_date": "01-2026"}
+	reqData, _ := json.Marshal(data)
+	// выполнение запроса
+	req, _ := http.NewRequest(http.MethodPost, "/api/cost", bytes.NewBuffer(reqData))
+	// добавляем заголовок
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	// проверка результатов
+	assert.Equal(t, http.StatusOK, w.Code)
+	want := "total price - 800 rubles"
+	assert.Equal(t, want, w.Body.String())
+}
+
+func TestTotalCostSubscriptionPeriodChangePrice(t *testing.T) {
+	// данные для запроса
+	data := map[string]any{"user_id": "3a51e2d6-b60b-40c5-993f-a251c9059bc6", "service_name": "ivi", "start_date": "05-2025", "end_date": "03-2026"}
+	reqData, _ := json.Marshal(data)
+	// выполнение запроса
+	req, _ := http.NewRequest(http.MethodPost, "/api/cost", bytes.NewBuffer(reqData))
+	// добавляем заголовок
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	// проверка результатов
+	assert.Equal(t, http.StatusOK, w.Code)
+	want := "total price - 1900 rubles"
+	assert.Equal(t, want, w.Body.String())
+}
+
+func TestTotalCostSubscriptionWrong1(t *testing.T) {
+	// данные для запроса (некорректный user_id)
+	data := map[string]any{"user_id": "3a51e2d6-b60b-40c5-a251c9059bc6", "service_name": "ivi", "start_date": "05-2025", "end_date": "03-2026"}
+	reqData, _ := json.Marshal(data)
+	// выполнение запроса
+	req, _ := http.NewRequest(http.MethodPost, "/api/cost", bytes.NewBuffer(reqData))
+	// добавляем заголовок
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	// проверка результатов
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	var response map[string]any
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+	want := map[string]any{"code": float64(400), "message": "user id is incorrect (example user_id: 123e4567-e89b-12d3-a456-426655440000)"}
+	assert.NoError(t, err)
+	assert.Equal(t, want, response)
+}
+
+func TestTotalCostSubscriptionWrong2(t *testing.T) {
+	// данные для запроса (отсутствует service_name)
+	data := map[string]any{"user_id": "3a51e2d6-b60b-40c5-993f-a251c9059bc6", "service_name": "", "start_date": "05-2025", "end_date": "03-2026"}
+	reqData, _ := json.Marshal(data)
+	// выполнение запроса
+	req, _ := http.NewRequest(http.MethodPost, "/api/cost", bytes.NewBuffer(reqData))
+	// добавляем заголовок
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	// проверка результатов
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	var response map[string]any
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+	want := map[string]any{"code": float64(400), "message": "invalid request"}
+	assert.NoError(t, err)
+	assert.Equal(t, want, response)
+}
+
+func TestTotalCostSubscriptionWrong3(t *testing.T) {
+	// данные для запроса (указан не существующий service_name)
+	data := map[string]any{"user_id": "3a51e2d6-b60b-40c5-993f-a251c9059bc6", "service_name": "noname", "start_date": "05-2025", "end_date": "03-2026"}
+	reqData, _ := json.Marshal(data)
+	// выполнение запроса
+	req, _ := http.NewRequest(http.MethodPost, "/api/cost", bytes.NewBuffer(reqData))
+	// добавляем заголовок
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	// проверка результатов
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	var response map[string]any
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+	want := map[string]any{"code": float64(404), "message": "service name you entered was not found"}
+	assert.NoError(t, err)
+	assert.Equal(t, want, response)
+}
+
+func TestTotalCostSubscriptionWrong4(t *testing.T) {
+	// данные для запроса (некорректная дата начала подписки)
+	data := map[string]any{"user_id": "3a51e2d6-b60b-40c5-993f-a251c9059bc6", "service_name": "ivi", "start_date": "05-", "end_date": "03-2026"}
+	reqData, _ := json.Marshal(data)
+	// выполнение запроса
+	req, _ := http.NewRequest(http.MethodPost, "/api/cost", bytes.NewBuffer(reqData))
+	// добавляем заголовок
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	// проверка результатов
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	var response map[string]any
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+	want := map[string]any{"code": float64(400), "message": "subscription start date is incorrect (example start date: 07-2025)"}
+	assert.NoError(t, err)
+	assert.Equal(t, want, response)
+}
+
+func TestTotalCostSubscriptionWrong5(t *testing.T) {
+	// данные для запроса (некорректная дата окончания подписки)
+	data := map[string]any{"user_id": "3a51e2d6-b60b-40c5-993f-a251c9059bc6", "service_name": "ivi", "start_date": "05-2025", "end_date": "03-"}
+	reqData, _ := json.Marshal(data)
+	// выполнение запроса
+	req, _ := http.NewRequest(http.MethodPost, "/api/cost", bytes.NewBuffer(reqData))
+	// добавляем заголовок
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	// проверка результатов
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	var response map[string]any
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+	want := map[string]any{"code": float64(400), "message": "subscription end date is incorrect (example end date: 05-2026)"}
+	assert.NoError(t, err)
+	assert.Equal(t, want, response)
+}
+
+func TestTotalCostSubscriptionWrong6(t *testing.T) {
+	// данные для запроса (некорректно задан период)
+	data := map[string]any{"user_id": "3a51e2d6-b60b-40c5-993f-a251c9059bc6", "service_name": "ivi", "start_date": "05-2025", "end_date": "03-2024"}
+	reqData, _ := json.Marshal(data)
+	// выполнение запроса
+	req, _ := http.NewRequest(http.MethodPost, "/api/cost", bytes.NewBuffer(reqData))
+	// добавляем заголовок
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	// проверка результатов
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	var response map[string]any
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+	want := map[string]any{"code": float64(400), "message": "the subscription period is set incorrectly"}
+	assert.NoError(t, err)
+	assert.Equal(t, want, response)
+}
+
+func TestTotalCostSubscriptionWrong7(t *testing.T) {
+	// данные для запроса (указан несуществующий user_id)
+	data := map[string]any{"user_id": "3a51e2d6-b60b-4015-9934-a251c9059bc6", "service_name": "ivi", "start_date": "05-2025", "end_date": "07-2025"}
+	reqData, _ := json.Marshal(data)
+	// выполнение запроса
+	req, _ := http.NewRequest(http.MethodPost, "/api/cost", bytes.NewBuffer(reqData))
+	// добавляем заголовок
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	// проверка результатов
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	var response map[string]any
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+	want := map[string]any{"code": float64(404), "message": "user with this user ID will not be found"}
+	assert.NoError(t, err)
+	assert.Equal(t, want, response)
 }
 
 func TestDeleteSubscriptionRight(t *testing.T) {
