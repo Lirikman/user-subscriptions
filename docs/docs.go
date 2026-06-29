@@ -430,11 +430,11 @@ const docTemplate = `{
             "properties": {
                 "code": {
                     "type": "integer",
-                    "example": 200
+                    "example": 400
                 },
                 "message": {
                     "type": "string",
-                    "example": "request was completed successfully"
+                    "example": "invalid request"
                 }
             }
         },

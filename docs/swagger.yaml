@@ -80,10 +80,10 @@ definitions:
   main.HTTPError:
     properties:
       code:
-        example: 200
+        example: 400
         type: integer
       message:
-        example: request was completed successfully
+        example: invalid request
         type: string
     type: object
   main.TotalPriceReqDTO:
