@@ -76,8 +76,8 @@ type TotalPriceReqDTO struct {
 
 // Структура ошибки при запросах
 type HTTPError struct {
-	Code    int    `json:"code" example:"200"`
-	Message string `json:"message" example:"request was completed successfully"`
+	Code    int    `json:"code" example:"400"`
+	Message string `json:"message" example:"invalid request"`
 }
 
 // CreateSubscription godoc
