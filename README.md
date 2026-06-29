@@ -73,7 +73,7 @@ make test
 
 ## 📡 API documentation
 
-📝 **Swagger UI (Interactive documentation): 
+📝 **Swagger UI (Interactive documentation):** 
 http://localhost:8080/swagger/index.html
 
 All requests are sent to the base URL: http://127.0.0.1:8080/api
